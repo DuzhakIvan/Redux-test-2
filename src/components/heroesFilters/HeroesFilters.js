@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { getActiveFilter } from '../../actions';
+import { useDispatch, useSelector } from 'react-redux'; // импортируем хуки  useDispatch для передачи action в reducer, useSelector для использования state из store Redux
+import { getActiveFilter } from '../../actions'; // импортируем action
 import Spinner from '../spinner/Spinner';
 
 // Задача для этого компонента:
@@ -10,32 +10,38 @@ import Spinner from '../spinner/Spinner';
 // Представьте, что вы попросили бэкенд-разработчика об этом
 
 
-const HeroesFilters = () => {
-    const {filters, filtersLoadingStatus, activeFilter} = useSelector(state => state);
-    const dispatch = useDispatch();
+const HeroesFilters = () => { // создаем компонент фильтров
+    const {filters, filtersLoadingStatus, activeFilter} = useSelector(state => state); // Берем состояния списка фильтров, статуса загрузки, активный фильтр 
+    const dispatch = useDispatch(); // создаем функцию по передаче в reducer
 
-    if (filtersLoadingStatus === "loading") {
-        return <Spinner/>;
-    } else if (filtersLoadingStatus === "error") {
-        return <h5 className="text-center mt-5">Ошибка загрузки</h5>
+    if (filtersLoadingStatus === "loading") { // Создаем условие, если статус = загрузка
+        return <Spinner/>; // возвращаем spinner
+    } else if (filtersLoadingStatus === "error") { // если статус = ошибке
+        return <h5 className="text-center mt-5">Ошибка загрузки</h5> // возвращаем заголовок с текстом, класс bootstrap tex--aligin: center; margin-top: 5px;
     }
 
-    const renderFiltersButtons = (arr) => {
-        if (arr.length === 0) {
-            return <h5 className="text-center mt-5">Фильтров нет</h5>
+    const renderFiltersButtons = (arr) => { // создаем функцию для рендера кнопок фильтров, передаем массив
+        if (arr.length === 0) { // если длина массива равна 0
+            return <h5 className="text-center mt-5">Фильтров нет</h5> // возвращаем заголовок с текстом
         }
 
-        return arr.map(({name, className, value}, i) => { 
-            let active = '';
-            if (activeFilter === value) {
-                active = 'active';
+        return arr.map(({name, className, value}, i) => { // возвращаем новый массив, но перед этим каждый элемент из старого массива изменим
+            let active = ''; // обьявляем переменную, которая будет отвечать активный ли фильтр
+            if (activeFilter === value) { // если состояние активного фильтра равно значению элементу массива
+                active = 'active'; // ставим активный
             }
-            return <button key={i} value='value' onClick={() => dispatch(getActiveFilter(value))} className={`btn ${className} ${active}`}>{name}</button>
+            return <button // возвращаем кнопку в массив
+                        key={i} // с ключем равным индексу элемента
+                        value={value} // атрибутом value
+                        onClick={() => dispatch(getActiveFilter(value))} // вешаем на каждую кнопку событие клика, при клике отправляется value кнопки в reducer для смены активного фильтра
+                        className={`btn ${className} ${active}`}>
+                            {name}
+                    </button> // в класс записываем данные с сервера для кадой кнопки и в зависимости от условия  будет ставиться active или нет, btn - добавляет стандартные стили кнопки в bootstrap
         })
     }
 
  
-    const elements = renderFiltersButtons(filters);
+    const elements = renderFiltersButtons(filters); // Присваивем переменной значение списка кнопок из модифицированного массива фильтров
 
     return (
         <div className="card shadow-lg mt-4">

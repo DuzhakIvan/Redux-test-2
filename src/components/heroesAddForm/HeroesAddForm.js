@@ -1,9 +1,8 @@
-import { v4 as createID } from 'uuid';
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { filtersFetched, filtersFetching, filtersFetchingError } from '../../actions';
-import { heroPost } from '../../actions';
-import { useHttp } from '../../hooks/http.hook';
+import { v4 as createID } from 'uuid'; // библиотека по генерации id
+import { useState, useEffect } from 'react'; // Ипортируем хуки useState для создания состояния компонента, useEffect - для применения эффектов в определенный момент жизненного цикла
+import { useDispatch, useSelector } from 'react-redux'; // импортируем хуки: useDispatch - для передачи нужного action в reducer, useSelector для получения доступа к олбьекту в store Redux
+import { filtersFetched, filtersFetching, filtersFetchingError, heroPost } from '../../actions'; // импортируем необходимые actions
+import { useHttp } from '../../hooks/http.hook'; // импортируем хук для связи с сервером
 
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать
@@ -15,46 +14,49 @@ import { useHttp } from '../../hooks/http.hook';
 // Элементы <option></option> желательно сформировать на базе
 // данных из фильтров
 
-const HeroesAddForm = () => {
-    const {filters} = useSelector(state => state); // Вытягиваем два значения из state
-    const dispatch = useDispatch();
-    const {request} = useHttp();
+const HeroesAddForm = () => { // создаем функциональный компонент
+    const {filters} = useSelector(state => state); // Вытягиваем два значения из state store Redux
+    const dispatch = useDispatch(); // обьявляем функцию dispatch
+    const {request} = useHttp(); // вытягиваем запрос
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState({ // Создаем состояние компонента с необходимыми данными для формы
         name: '',
         description: '',
         element: '',
     })
 
-    useEffect(() => {
-        dispatch(filtersFetching());
-        request("http://localhost:3001/filters", 'GET')
+    useEffect(() => { // Вызываем хук для связи с сервером
+        dispatch(filtersFetching()); // Меняем статус на получение данных по фильтрам с сервера
+        request("http://localhost:3001/filters", 'GET') // формируем запрос на сервер
             .then(data => dispatch(filtersFetched(data))) // action 'FILTERS_FETCHED
             .catch(() => dispatch(filtersFetchingError())) // action 'FILTERS_FETCHING_ERROR'
     }, []);
 
 
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value });
+    const handleInputChange = (event) => { // создаем функцию на событие заполнения инпута формы
+        const { name, value } = event.target; // вытягиваем из инпута DOM имя поля и введенное значение 
+        setFormData({ ...formData, [name]: value }); // обновляем stage компонента
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const newHero = {id: createID(), ...formData}
+    const handleSubmit = (event) => { // создаем функцию на событие отправки формы
+        event.preventDefault(); // отменяем стандартные действия события 
+        const newHero = {id: createID(), ...formData} // к сформированному обьекту state добавляем id с помощью функции из библиотеки
         
-        request("http://localhost:3001/heroes", 'POST', JSON.stringify(newHero))
-        .then(res => console.log(res, 'Отправка успешна'))
-        .then(dispatch(heroPost(newHero)))
-        .catch(err => console.log(err));
+        request("http://localhost:3001/heroes", 'POST', JSON.stringify(newHero)) // Отправляем данные на сервер с помощью метода POST и предварительно конвертируем в формат json
+        .then(res => console.log(res, 'Отправка успешна')) // В случае успешного ответа от сервера, выводим сообщение в консоль, так же эта команда не даст приступить к следующему действию при ошибке
+        .then(dispatch(heroPost(newHero))) // отправляем в reducer с action с новым героем
+        .catch(err => console.log(err)); // в случае ошибки, выводим в консоль ошибку
 
-        setFormData({ name: '', description: '', element: '' });
+        setFormData({ name: '', description: '', element: '' }); // Очищаем state компонента
     };
 
-    const elements = filters.map(({value, name, option}, i) => { 
-        if (option) {
-        return <option key={i} value={value}>{name}</option>}
+    const elements = filters.map(({value, name, option}, i) => {  // создем элементы из массива фильтров из глобального store Redux, и методом map формируем новый массив 
+        if (option) { // в случае если элемент содержит значение option
+        return <option key={i} value={value}>{name}</option>} // возвращаем в массив тег option с параметрами 
+        // key= равным индексу элемента, необходим для правильной работы перерисовки компонентов
+        // value - значение option которое будет отправляться на сервер
+        // name - отобращаемое для пользователя название option
     })
 
     return (

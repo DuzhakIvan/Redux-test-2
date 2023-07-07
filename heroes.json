@@ -1,18 +1,5 @@
 {
-  "heroes": [
-    {
-      "id": "9935eba7-b2ca-47b9-8db8-46e74a9a0438",
-      "name": "5",
-      "description": "5",
-      "element": ""
-    },
-    {
-      "id": "1cf20c23-582d-4a0f-9ff4-4faef637ab3f",
-      "name": "22",
-      "description": "22",
-      "element": "water"
-    }
-  ],
+  "heroes": [],
   "filters": [
     {
       "value": "all",
