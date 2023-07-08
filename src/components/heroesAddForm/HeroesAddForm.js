@@ -15,7 +15,7 @@ import { useHttp } from '../../hooks/http.hook'; // импортируем ху�
 // данных из фильтров
 
 const HeroesAddForm = () => { // создаем функциональный компонент
-    const {filters} = useSelector(state => state); // Вытягиваем два значения из state store Redux
+    const {filters} = useSelector(state => state.filters); // Вытягиваем значения из обьекта reducer filters из  store Redux
     const dispatch = useDispatch(); // обьявляем функцию dispatch
     const {request} = useHttp(); // вытягиваем запрос
 

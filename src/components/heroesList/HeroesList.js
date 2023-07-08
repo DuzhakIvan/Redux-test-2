@@ -2,6 +2,7 @@ import {useHttp} from '../../hooks/http.hook'; // импортируем соз�
 import { useEffect, useCallback } from 'react'; // импортируем хуки: useEffect для вызывания побочныъ эффектов в определенном жизненном цикле, useCallback для мемоизации результата функции
 import { useDispatch, useSelector } from 'react-redux';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { createSelector } from 'reselect';
 
 import { heroesFetching, heroesFetched, heroesFetchingError, heroDelete } from '../../actions';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
@@ -14,7 +15,33 @@ import './heroesList.scss';
 // Удаление идет и с json файла при помощи метода DELETE
 
 const HeroesList = () => {
-    const {heroesLoadingStatus, visualHeroes} = useSelector(state => state); // Вытягиваем два значения из state
+
+    const filterHeroesSelector = useCallback(createSelector( // Получим функцию селектора
+        (state) => state.filters.activeFilter, // Результат первой функции значение активного фильтра из store Redux reducer filters
+        (state) => state.heroes.heroes, // Результат второй функции значение списка героев из store Redux reducer heroes
+        (activeFilter, heroes) => {
+            if (activeFilter === 'all') { // если активный фильтр all, обращаемся к reducer фильтров ик его свойству
+                console.log('render'); // Будет вызываться не смотря на то, что значения в reducer не будут изменяться...
+                return heroes; // возвращаем из state.heroes reducer весь массив с героями, 
+            } else { // или
+                return heroes.filter(item => activeFilter === item.element) // возвращаем отфлитрованный массив в зависимости от фильтра
+            }
+        }
+    ), [])
+    
+    const visualHeroes = useSelector(filterHeroesSelector);    
+
+    // Из за проблемы мемоизации данных эта функция не оптимизирована
+    // const visualHeroes = useSelector(state => { // Чтобы избавиться от зависимостей в reducer, прописываем условия прямо в useSelector
+    //     if (state.filters.activeFilter === 'all') { // если активный фильтр all, обращаемся к reducer фильтров ик его свойству
+    //         console.log('render'); // Будет вызываться не смотря на то, что значения в reducer не будут изменяться...
+    //         return state.heroes.heroes; // возвращаем из state.heroes reducer весь массив с героями, 
+    //     } else { // или
+    //         return state.heroes.heroes.filter(item => state.filters.activeFilter === item.element) // возвращаем отфлитрованный массив в зависимости от фильтра
+    //     }
+    // }) // Благодаря описанию логики здесь, на уже не нужны переменные visualHeroes в reducer и зависимости прописанные там, а так же разделили редьюсеры по логике
+
+    const {heroesLoadingStatus} = useSelector(state => state); // Вытягиваем два значения из state
     const dispatch = useDispatch();
     const {request} = useHttp(); // Получаем метод хука
 

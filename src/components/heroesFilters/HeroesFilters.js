@@ -11,7 +11,7 @@ import Spinner from '../spinner/Spinner';
 
 
 const HeroesFilters = () => { // создаем компонент фильтров
-    const {filters, filtersLoadingStatus, activeFilter} = useSelector(state => state); // Берем состояния списка фильтров, статуса загрузки, активный фильтр 
+    const {filters, filtersLoadingStatus, activeFilter} = useSelector(state => state.filters); // Берем состояния списка фильтров, статуса загрузки, активный фильтр из reducer filters
     const dispatch = useDispatch(); // создаем функцию по передаче в reducer
 
     if (filtersLoadingStatus === "loading") { // Создаем условие, если статус = загрузка
