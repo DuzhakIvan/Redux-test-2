@@ -41,12 +41,12 @@ const HeroesList = () => {
     //     }
     // }) // Благодаря описанию логики здесь, на уже не нужны переменные visualHeroes в reducer и зависимости прописанные там, а так же разделили редьюсеры по логике
 
-    const {heroesLoadingStatus} = useSelector(state => state); // Вытягиваем два значения из state
+    const {heroesLoadingStatus} = useSelector(state => state.heroes); // Вытягиваем значения из state
     const dispatch = useDispatch();
     const {request} = useHttp(); // Получаем метод хука
 
     useEffect(() => {
-        dispatch(heroesFetching()); // запускаем загрузку action 'HEROES_FETCHING'
+        dispatch('HEROES_FETCHING'); // запускаем загрузку action 'HEROES_FETCHING' // мы enhancler наш store и теперь можем в dispatch передавать строку
         request("http://localhost:3001/heroes", 'GET')
             .then(data => dispatch(heroesFetched(data))) // action 'HEROES_FETCHED
             .catch(() => dispatch(heroesFetchingError())) // action 'HEROES_FETCHING_ERROR'
