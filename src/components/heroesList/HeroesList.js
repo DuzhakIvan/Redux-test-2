@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { createSelector } from 'reselect';
 
-import { heroesFetching, heroesFetched, heroesFetchingError, heroDelete } from '../../actions';
+// import { heroesFetching, heroesFetched, heroesFetchingError, heroDelete } from '../../actions';
+import {fetchHeroes, heroDelete } from '../../actions'; // Теперь один fetchHeroes заменит нам 3 action
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
@@ -45,14 +46,19 @@ const HeroesList = () => {
     const dispatch = useDispatch();
     const {request} = useHttp(); // Получаем метод хука
 
-    useEffect(() => {
-        dispatch('HEROES_FETCHING'); // запускаем загрузку action 'HEROES_FETCHING' // мы enhancler наш store и теперь можем в dispatch передавать строку
-        request("http://localhost:3001/heroes", 'GET')
-            .then(data => dispatch(heroesFetched(data))) // action 'HEROES_FETCHED
-            .catch(() => dispatch(heroesFetchingError())) // action 'HEROES_FETCHING_ERROR'
+    // useEffect(() => {
+    //     dispatch(heroesFetching); // запускаем загрузку action 'HEROES_FETCHING' // теперь можем передавать функцию action напрямую - thunk работает
+    //     request("http://localhost:3001/heroes", 'GET')
+    //         .then(data => dispatch(heroesFetched(data))) // action 'HEROES_FETCHED
+    //         .catch(() => dispatch(heroesFetchingError())) // action 'HEROES_FETCHING_ERROR'
 
-        // eslint-disable-next-line
-    }, []);
+    //     // eslint-disable-next-line
+    // }, []);
+
+    useEffect(() => {
+        dispatch(fetchHeroes(request)); // Применяем комбинированый action и передаем функцию запроса на сервер
+    } 
+    ,[])
 
     const onDelete = useCallback((id) => { // Используем useCallback для сохранения ссылки на данную функцию, при ререндере компонента ссылка на функцию останется.
         request(`http://localhost:3001/heroes/${id}`, "DELETE") // Делаем запрос на сервер с методом DELETE на конкретный обьект героев с указанным id, благодаря библиотеке json-server

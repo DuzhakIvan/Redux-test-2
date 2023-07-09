@@ -1,7 +1,7 @@
 import { v4 as createID } from 'uuid'; // библиотека по генерации id
 import { useState, useEffect } from 'react'; // Ипортируем хуки useState для создания состояния компонента, useEffect - для применения эффектов в определенный момент жизненного цикла
 import { useDispatch, useSelector } from 'react-redux'; // импортируем хуки: useDispatch - для передачи нужного action в reducer, useSelector для получения доступа к олбьекту в store Redux
-import { filtersFetched, filtersFetching, filtersFetchingError, heroPost } from '../../actions'; // импортируем необходимые actions
+import { fetchFilters, heroPost } from '../../actions'; // импортируем необходимые actions
 import { useHttp } from '../../hooks/http.hook'; // импортируем хук для связи с сервером
 
 // Задача для этого компонента:
@@ -26,10 +26,7 @@ const HeroesAddForm = () => { // создаем функциональный к�
     })
 
     useEffect(() => { // Вызываем хук для связи с сервером
-        dispatch(filtersFetching()); // Меняем статус на получение данных по фильтрам с сервера
-        request("http://localhost:3001/filters", 'GET') // формируем запрос на сервер
-            .then(data => dispatch(filtersFetched(data))) // action 'FILTERS_FETCHED
-            .catch(() => dispatch(filtersFetchingError())) // action 'FILTERS_FETCHING_ERROR'
+        dispatch(fetchFilters(request)) // Благодаря использованию thunk redux мы смогли записать 3 action в одну функцию action
     }, []);
 
 

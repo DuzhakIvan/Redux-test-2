@@ -1,3 +1,10 @@
+export const fetchHeroes = (request) => (dispatch) => { // создадим комлексный actionCreator для получения героев и обработки состояний
+    dispatch(heroesFetching()); // запускаем загрузку action 'HEROES_FETCHING' // теперь можем передавать функцию action напрямую - thunk работает
+    request("http://localhost:3001/heroes", 'GET')
+        .then(data => dispatch(heroesFetched(data))) // action 'HEROES_FETCHED
+        .catch(() => dispatch(heroesFetchingError())) // action 'HEROES_FETCHING_ERROR'
+}
+
 export const heroesFetching = () => { // Действие запроса массива героев с сервера
     return {
         type: 'HEROES_FETCHING'
@@ -33,6 +40,13 @@ export const heroPost = (heroData) => { // Публикация нового п�
     }
 }
 
+export const fetchFilters = (request) => (dispatch) => { // создадим комлексный actionCreator для получения героев и обработки состояний
+    dispatch(filtersFetching()); // запускаем загрузку action 'HEROES_FETCHING' // теперь можем передавать функцию action напрямую - thunk работает
+    request("http://localhost:3001/filters", 'GET')
+        .then(data => dispatch(filtersFetched(data))) // action 'HEROES_FETCHED
+        .catch(() => dispatch(filtersFetchingError())) // action 'HEROES_FETCHING_ERROR'
+}
+
 export const filtersFetching = () => { // Статус получения списка фильтров с сервера
     return {
         type: 'FILTERS_FETCHING'
@@ -52,9 +66,19 @@ export const filtersFetchingError = () => { // Запрос фильтров з�
     }
 }
 
-export const getActiveFilter = (filter) => { // Получение активного фильтра на данный момент
-    return {
+// export const getActiveFilter = (filter) => (dispatch) => { // Получение активного фильтра на данный момент // dispatch сам передается из thunk
+//     setTimeout(() => { // Добавляем таймер
+//         dispatch({ // запускаем dispatch из возвращаемой функции thunk
+//             type: 'ACTIVE_FILTER',
+//             payload: filter // Передаем новый активный фильтр
+//         })
+//     }, 1000) // ставим задержку в 1 сек
+// }
+
+export const getActiveFilter = (filter) => { // Получение активного фильтра на данный момент // dispatch сам передается из thunk
+    return { 
         type: 'ACTIVE_FILTER',
         payload: filter // Передаем новый активный фильтр
     }
+
 }
