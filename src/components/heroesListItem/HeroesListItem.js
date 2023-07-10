@@ -1,5 +1,5 @@
 
-const HeroesListItem = ({name, description, element, onDelete}) => { // создаем компонент элемента списка достаем из пропсов переданные значения и функцию
+const HeroesListItem = ({name, description, element, onDelete}) => {
 
     let elementClassName;
     switch (element) {
@@ -19,7 +19,6 @@ const HeroesListItem = ({name, description, element, onDelete}) => { // созд
             elementClassName = 'bg-warning bg-gradient';
     }
 
-    // указывем переданные значения из пропсов и вещаем функцию обработчик события по нжатию
     return (
         <li 
             className={`card flex-row mb-4 shadow-lg text-white ${elementClassName}`}>

@@ -3,25 +3,25 @@ import { useCallback } from "react"; // импортируем хук useCallbac
 export const useHttp = () => { // создаем и сразу экспортируем хук 
     // const [process, setProcess] = useState('waiting');
 
-    const request = useCallback(async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => { // создаем функцию для запроса на сервер
+    const request = useCallback(async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => { 
 
         // setProcess('loading');
 
-        try { // пробуем 
-            const response = await fetch(url, {method, body, headers}); // дождись ответа от сервера по заданному адресу, методу, телу и заголовам
+        try { 
+            const response = await fetch(url, {method, body, headers}); 
 
-            if (!response.ok) { // если статус ответка НЕ ok
-                throw new Error(`Could not fetch ${url}, status: ${response.status}`); // выкинь ошибку с адрессом запроса и статусом ошибки 
+            if (!response.ok) { 
+                throw new Error(`Could not fetch ${url}, status: ${response.status}`);  
             }
 
-            const data = await response.json(); // если все ок, то запиши в дату дождавшись ответа от сервера, результат запроса
+            const data = await response.json();
 
-            return data; // результат функции data
-        } catch(e) { // если будет ошибка, выкинь ее
+            return data; 
+        } catch(e) { 
             // setProcess('error');
             throw e;
         }
-    }, []); // Ссылка на эту функцию создаться один раз при монтировании создасться
+    }, []); 
     
     // const clearError = useCallback(() => {
         // setProcess('loading');

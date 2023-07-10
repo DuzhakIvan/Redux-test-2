@@ -1,5 +1,6 @@
 import { createAction } from "@reduxjs/toolkit";
 import {heroesFetching, heroesFetched, heroesFetchingError } from '../components/heroesList/heroesSlice' // Пока импортируем сюда из slice
+import {filtersFetching, filtersFetched, filtersFetchingError } from '../components/heroesFilters/filtersSlice' // Пока импортируем сюда из slice
 
 export const fetchHeroes = (request) => (dispatch) => { // создадим комлексный actionCreator для получения героев и обработки состояний
     dispatch(heroesFetching()); // запускаем загрузку action 'HEROES_FETCHING' // теперь можем передавать функцию action напрямую - thunk работает
@@ -61,24 +62,24 @@ export const fetchFilters = (request) => (dispatch) => { // создадим к�
         .catch(() => dispatch(filtersFetchingError())) // action 'HEROES_FETCHING_ERROR'
 }
 
-export const filtersFetching = () => { // Статус получения списка фильтров с сервера
-    return {
-        type: 'FILTERS_FETCHING'
-    }
-}
+// export const filtersFetching = () => { // Статус получения списка фильтров с сервера
+//     return {
+//         type: 'FILTERS_FETCHING'
+//     }
+// }
 
-export const filtersFetched = (filters) => { // Статус: фильтры получены с сервера, получает массив фильтров
-    return {
-        type: 'FILTERS_FETCHED',
-        payload: filters // массив фильтров с сервера
-    }
-}
+// export const filtersFetched = (filters) => { // Статус: фильтры получены с сервера, получает массив фильтров
+//     return {
+//         type: 'FILTERS_FETCHED',
+//         payload: filters // массив фильтров с сервера
+//     }
+// }
 
-export const filtersFetchingError = () => { // Запрос фильтров завершился ошибкой
-    return {
-        type: 'FILTERS_FETCHING_ERROR'
-    }
-}
+// export const filtersFetchingError = () => { // Запрос фильтров завершился ошибкой
+//     return {
+//         type: 'FILTERS_FETCHING_ERROR'
+//     }
+// }
 
 // export const getActiveFilter = (filter) => (dispatch) => { // Получение активного фильтра на данный момент // dispatch сам передается из thunk
 //     setTimeout(() => { // Добавляем таймер
@@ -89,10 +90,10 @@ export const filtersFetchingError = () => { // Запрос фильтров з�
 //     }, 1000) // ставим задержку в 1 сек
 // }
 
-export const getActiveFilter = (filter) => { // Получение активного фильтра на данный момент // dispatch сам передается из thunk
-    return { 
-        type: 'ACTIVE_FILTER',
-        payload: filter // Передаем новый активный фильтр
-    }
+// export const getActiveFilter = (filter) => { // Получение активного фильтра на данный момент // dispatch сам передается из thunk
+//     return { 
+//         type: 'ACTIVE_FILTER',
+//         payload: filter // Передаем новый активный фильтр
+//     }
 
-}
+// }
