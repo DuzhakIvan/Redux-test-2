@@ -25,27 +25,33 @@ export const heroesFetching = createAction('HEROES_FETCHING'); // Примене
 export const heroesFetched = createAction('HEROES_FETCHED'); // Не смотря на то, что мы не указываем payload, он автоматически передается.
 
 
-export const heroesFetchingError = () => { // Запрос завершился ошибкой
-    return {
-        type: 'HEROES_FETCHING_ERROR'
-    }
-}
+// export const heroesFetchingError = () => { // Запрос завершился ошибкой
+//     return {
+//         type: 'HEROES_FETCHING_ERROR'
+//     }
+// }
+
+export const heroesFetchingError = createAction('HEROES_FETCHING_ERROR');
 
 // Добавляем action на удаление из списка
 // То что будем передавать в reducer
-export const heroDelete = (heroID) => { // Действие удаления персонажа по его ID
-    return {
-        type: 'HERO_DELETE',
-        payload: heroID // ID героя для удаления
-    }
-}
+// export const heroDelete = (heroID) => { // Действие удаления персонажа по его ID
+//     return {
+//         type: 'HERO_DELETE',
+//         payload: heroID // ID героя для удаления
+//     }
+// }
 
-export const heroPost = (heroData) => { // Публикация нового персонажа, приходит обьект с героем с сервера
-    return {
-        type: 'HERO_POST',
-        payload: heroData // обьект с героем
-    }
-}
+export const heroDelete = createAction('HERO_DELETE');
+
+// export const heroPost = (heroData) => { // Публикация нового персонажа, приходит обьект с героем с сервера
+//     return {
+//         type: 'HERO_POST',
+//         payload: heroData // обьект с героем
+//     }
+// }
+
+export const heroPost = createAction('HERO_POST');
 
 export const fetchFilters = (request) => (dispatch) => { // создадим комлексный actionCreator для получения героев и обработки состояний
     dispatch(filtersFetching()); // запускаем загрузку action 'HEROES_FETCHING' // теперь можем передавать функцию action напрямую - thunk работает
