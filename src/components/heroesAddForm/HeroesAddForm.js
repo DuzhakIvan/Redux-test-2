@@ -1,8 +1,9 @@
 import { v4 as createID } from 'uuid'; // библиотека по генерации id
 import { useState, useEffect } from 'react'; // Ипортируем хуки useState для создания состояния компонента, useEffect - для применения эффектов в определенный момент жизненного цикла
 import { useDispatch, useSelector } from 'react-redux'; // импортируем хуки: useDispatch - для передачи нужного action в reducer, useSelector для получения доступа к олбьекту в store Redux
-import { fetchFilters, heroPost } from '../../actions'; // импортируем необходимые actions
+import { fetchFilters } from '../../actions'; // импортируем необходимые actions
 import { useHttp } from '../../hooks/http.hook'; // импортируем хук для связи с сервером
+import { heroPost } from '../heroesList/heroesSlice'
 
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать

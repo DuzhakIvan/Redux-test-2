@@ -6,7 +6,7 @@
 // Теперь эти команды не используются благодаря Toolkit
 import { configureStore } from '@reduxjs/toolkit';
 // import ReduxThunk from 'redux-thunk' // импорнируем библиотеку middleware для возможности передачи функции в качестве action в reducer
-import heroes from '../reducers/heroes'
+import heroes from '../components/heroesList/heroesSlice' // импортируем переменную для содания стора
 import filters from '../reducers/filters';
 
 //middleware

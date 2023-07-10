@@ -35,12 +35,6 @@
       "name": "123",
       "description": "123",
       "element": "wind"
-    },
-    {
-      "id": "4d821330-f562-4aba-b723-ea6feb6a30b9",
-      "name": "2",
-      "description": "3",
-      "element": "earth"
     }
   ],
   "filters": [
