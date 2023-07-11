@@ -1,11 +1,11 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter, createSelector } from "@reduxjs/toolkit";
 import { useHttp } from '../../hooks/http.hook'
 
+const heroesAdapter = createEntityAdapter(); // вызов этой функции создаст готовый обьект с методами, callback, мемоизированными селекторами (позволяют вытаскивать определенные сущности изи стора)
 
-const initialState = { 
-    heroes: [], 
-    heroesLoadingStatus: 'idle',
-}
+const initialState = heroesAdapter.getInitialState({ // метод Адаптера создающий начальное состояние обьект (id[], entities{}, {...args})
+    heroesLoadingStatus: 'idle' // дополнительное свойство state
+});
 
 export const fetchHeroes = createAsyncThunk(
     'heroes/fetchHeroes', // прописываем имя_среза/тип_action
@@ -20,10 +20,10 @@ const heroesSlice = createSlice({
     initialState, 
     reducers: { 
         heroPost: (state, action) => {
-            state.heroes.push(action.payload); 
+            heroesAdapter.addOne(state, action.payload); 
         },
         heroDelete: (state, action) => {
-            state.heroes = state.heroes.filter(item => item.id !== action.payload);
+            heroesAdapter.removeOne(state, action.payload)
         }
     },
     extraReducers: (builder) => {
@@ -31,7 +31,8 @@ const heroesSlice = createSlice({
             .addCase(fetchHeroes.pending, state => {state.heroesLoadingStatus = 'loading'})
             .addCase(fetchHeroes.fulfilled, (state, action) => {
                 state.heroesLoadingStatus = 'idle';
-                state.heroes = action.payload})
+                heroesAdapter.setAll(state, action.payload)
+            })
             .addCase(fetchHeroes.rejected, state => {  state.heroesLoadingStatus = 'error'})
             .addDefaultCase(() => {})
                 
@@ -41,6 +42,22 @@ const heroesSlice = createSlice({
 const {actions, reducer} = heroesSlice; 
 
 export default reducer; 
+
+const {selectAll } = heroesAdapter.getSelectors(state => state.heroes); // Вытаскиваем селекторы из Адаптера с четкой привязкой к обьекту heroes
+
+export const filterHeroesSelector = createSelector(  // Перенесли функцию из компонента
+    (state) => state.filters.activeFilter, 
+    // (state) => state.heroes.heroes,
+    selectAll, // Замена верхней функции
+    (activeFilter, heroes) => { // в heroes передастся второй аргумент - результат функции selectAll - массив сформированный методом selectAll
+        if (activeFilter === 'all') {
+            return heroes;
+        } else { 
+            return heroes.filter(item => activeFilter === item.element) 
+        }
+    }
+)
+
 export const { 
     heroesFetching,
     heroesFetched,

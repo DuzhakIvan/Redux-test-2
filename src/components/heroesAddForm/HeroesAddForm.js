@@ -2,12 +2,13 @@ import { v4 as createID } from 'uuid';
 import { useState, useEffect } from 'react'; 
 import { useDispatch, useSelector } from 'react-redux'; 
 
-import { fetchFilters } from '../heroesFilters/filtersSlice'; 
+import store from '../../store/index'
+import { fetchFilters, selectAll } from '../heroesFilters/filtersSlice'; 
 import { useHttp } from '../../hooks/http.hook'; 
 import { heroPost } from '../heroesList/heroesSlice'
 
 const HeroesAddForm = () => { 
-    const {filters} = useSelector(state => state.filters); 
+    const filters = useSelector(selectAll);
     const dispatch = useDispatch(); 
     const {request} = useHttp();
 
@@ -20,8 +21,6 @@ const HeroesAddForm = () => {
     useEffect(() => { 
         dispatch(fetchFilters()) 
     }, []);
-
-
 
     const handleInputChange = (event) => { 
         const { name, value } = event.target; 

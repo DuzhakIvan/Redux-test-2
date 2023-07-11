@@ -47,33 +47,44 @@
       "name": "3245",
       "description": "2345",
       "element": "water"
+    },
+    {
+      "id": "60304f89-ef62-49e8-986f-11dd8771127b",
+      "name": "1",
+      "description": "1",
+      "element": ""
     }
   ],
   "filters": [
     {
+      "id": "all",
       "value": "all",
       "name": "Все",
       "className": "btn-outline-dark"
     },
     {
+      "id": "fire",
       "value": "fire",
       "name": "Огонь",
       "option": "true",
       "className": "btn-danger"
     },
     {
+      "id": "water",
       "value": "water",
       "name": "Вода",
       "option": "true",
       "className": "btn-primary"
     },
     {
+      "id": "wind",
       "value": "wind",
       "name": "Ветер",
       "option": "true",
       "className": "btn-success"
     },
     {
+      "id": "earth",
       "value": "earth",
       "name": "Земля",
       "option": "true",
