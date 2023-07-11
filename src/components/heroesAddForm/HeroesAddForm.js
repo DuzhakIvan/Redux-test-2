@@ -2,7 +2,7 @@ import { v4 as createID } from 'uuid';
 import { useState, useEffect } from 'react'; 
 import { useDispatch, useSelector } from 'react-redux'; 
 
-import { fetchFilters } from '../../actions'; 
+import { fetchFilters } from '../heroesFilters/filtersSlice'; 
 import { useHttp } from '../../hooks/http.hook'; 
 import { heroPost } from '../heroesList/heroesSlice'
 
@@ -18,7 +18,7 @@ const HeroesAddForm = () => {
     })
 
     useEffect(() => { 
-        dispatch(fetchFilters(request)) 
+        dispatch(fetchFilters()) 
     }, []);
 
 

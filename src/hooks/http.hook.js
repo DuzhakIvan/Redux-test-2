@@ -1,11 +1,6 @@
-import { useCallback } from "react"; // импортируем хук useCallback для мемоизации функции
-
 export const useHttp = () => { // создаем и сразу экспортируем хук 
-    // const [process, setProcess] = useState('waiting');
 
-    const request = useCallback(async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => { 
-
-        // setProcess('loading');
+    const request = async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => { 
 
         try { 
             const response = await fetch(url, {method, body, headers}); 
@@ -18,18 +13,11 @@ export const useHttp = () => { // создаем и сразу экспорти�
 
             return data; 
         } catch(e) { 
-            // setProcess('error');
             throw e;
         }
-    }, []); 
+    }; 
     
-    // const clearError = useCallback(() => {
-        // setProcess('loading');
-    // }, []);
 
-    return {request, 
-            // clearError, 
-            // process, 
-            // setProcess
-        }
+
+    return {request}
 }
