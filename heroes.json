@@ -17,42 +17,6 @@
       "name": "2",
       "description": "2",
       "element": "wind"
-    },
-    {
-      "id": "5eb9e73b-4edc-46c7-a9fd-20536719ae8b",
-      "name": "3",
-      "description": "3",
-      "element": "earth"
-    },
-    {
-      "id": "013594f0-0844-474f-ac9e-0a3f50baa3a2",
-      "name": "2",
-      "description": "2",
-      "element": ""
-    },
-    {
-      "id": "a92ad84c-01cd-4ebc-98f7-476b8b35d710",
-      "name": "123",
-      "description": "123",
-      "element": "wind"
-    },
-    {
-      "id": "e05be5b7-a40b-42cf-93b5-18b6839f5747",
-      "name": "1234",
-      "description": "1234",
-      "element": "water"
-    },
-    {
-      "id": "b00974a1-e8c7-4738-bd7d-f5e6d19677fd",
-      "name": "3245",
-      "description": "2345",
-      "element": "water"
-    },
-    {
-      "id": "60304f89-ef62-49e8-986f-11dd8771127b",
-      "name": "1",
-      "description": "1",
-      "element": ""
     }
   ],
   "filters": [

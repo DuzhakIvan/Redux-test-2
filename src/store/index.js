@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import heroes from '../components/heroesList/heroesSlice' 
 import filters from '../components/heroesFilters/filtersSlice';
+import { apiSlice } from '../api/apiSlice';
 
 //middleware
 const stringMiddleware = (store) => 
@@ -15,8 +16,10 @@ const stringMiddleware = (store) =>
 }
 
 const store = configureStore({ 
-    reducer: {heroes, filters},
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stringMiddleware), 
+    reducer: {heroes, 
+                filters, 
+                [apiSlice.reducerPath] : apiSlice.reducer}, // передаем reducer созданный RTK в store
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stringMiddleware, apiSlice.middleware), // и подключаем middleware RTK 
     // preloadedState: // оптциональный параметр для задания состояние начального хранилища
     devTools: process.env.NODE_ENV !== 'production', // Это переменная окружения в Node.js, если мы не в режиме production то ToolKit будет включено
     

@@ -1,9 +1,10 @@
 import {useHttp} from '../../hooks/http.hook'; 
-import { useEffect, useCallback } from 'react'; 
+import { useEffect, useCallback, useMemo } from 'react'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import { fetchHeroes, heroDelete, filterHeroesSelector } from './heroesSlice'; 
+import { useGetHeroesQuery, useDeleteHeroMutation } from '../../api/apiSlice';
 
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
@@ -11,9 +12,32 @@ import './heroesList.scss';
 
 const HeroesList = () => {
 
-    const visualHeroes = useSelector(filterHeroesSelector);    
+    const {
+        data: heroes = [], // данные которые мы получили по запросу, по умолчанию сделаем его пустым
+        isFetching, // запросы на сервер true
+        isLoading, // впервый раз обращаемся к серверу
+        isSuccess, // кода данные загружены
+        isError, // ошибка при запросе
+        error, // сама ошибка
+        isUninitialized, // если true - запрос не отправлен еще
+        refetch // сделать запрос в ручную
+    } = useGetHeroesQuery(); // достаем готовые сущности из сгенерированного хука query
 
-    const {heroesLoadingStatus} = useSelector(state => state.heroes); 
+    const [deleteHero] = useDeleteHeroMutation(); // вытаскиваем функцию из мутации
+
+    const activeFilter = useSelector(state => state.filters.activeFilter);
+    const filteredHeroes = useMemo (() => { 
+        const filteredHeroes = heroes.slice(); // создаем копию массива для иммутабельности // метод slice() возвращает копию массива по указанным индексам от и до
+        if (activeFilter === 'all') {
+            return filteredHeroes;
+        } else { 
+            return filteredHeroes.filter(item => activeFilter === item.element) 
+        }
+    }, [heroes, activeFilter ])
+
+    // const visualHeroes = useSelector(filterHeroesSelector);    
+
+    // const {heroesLoadingStatus} = useSelector(state => state.heroes); 
     const dispatch = useDispatch();
     const {request} = useHttp(); 
 
@@ -23,16 +47,18 @@ const HeroesList = () => {
     ,[])
 
     const onDelete = useCallback((id) => { 
-        request(`http://localhost:3001/heroes/${id}`, "DELETE") 
-            .then(data => console.log(data, 'Deleted')) 
-            .then(dispatch(heroDelete(id))) 
-            .catch(err => console.log(err)); 
+
+        deleteHero(id); // заменяем на функцию
+        // request(`http://localhost:3001/heroes/${id}`, "DELETE") 
+        //     .then(data => console.log(data, 'Deleted')) 
+        //     .then(dispatch(heroDelete(id))) 
+        //     .catch(err => console.log(err)); 
     }, [request]);
 
 
-    if (heroesLoadingStatus === "loading") { 
+    if (isLoading) { 
         return <Spinner/>; 
-    } else if (heroesLoadingStatus === "error") { 
+    } else if (isError) { 
         return <h5 className="text-center mt-5">Ошибка загрузки</h5> 
     }
 
@@ -46,7 +72,7 @@ const HeroesList = () => {
         })
     }
 
-    const elements = renderHeroesList(visualHeroes); 
+    const elements = renderHeroesList(filteredHeroes); 
     return (
         <TransitionGroup component="ul">
             {elements}

@@ -6,11 +6,14 @@ import store from '../../store/index'
 import { fetchFilters, selectAll } from '../heroesFilters/filtersSlice'; 
 import { useHttp } from '../../hooks/http.hook'; 
 import { heroPost } from '../heroesList/heroesSlice'
+import { useCreateHeroMutation } from '../../api/apiSlice';
 
 const HeroesAddForm = () => { 
     const filters = useSelector(selectAll);
     const dispatch = useDispatch(); 
     const {request} = useHttp();
+
+    const [createHero, {isLoading}] = useCreateHeroMutation(); // деструктуризируем хук мутации, [функция_ которая_ вызывает_мутацию, {обьект с данными о состоянии запроса} ]
 
     const [formData, setFormData] = useState({
         name: '',
@@ -31,10 +34,12 @@ const HeroesAddForm = () => {
         event.preventDefault();
         const newHero = {id: createID(), ...formData} 
         
-        request("http://localhost:3001/heroes", 'POST', JSON.stringify(newHero)) 
-        .then(res => console.log(res, 'Отправка успешна')) 
-        .then(dispatch(heroPost(newHero)))
-        .catch(err => console.log(err));
+        createHero(newHero).unwrap(); // передаем в функцию запроса нового героя, unwrap() - это особенность по документации, отправятся данные на сервер, это никак не влияет на обновление
+
+        // request("http://localhost:3001/heroes", 'POST', JSON.stringify(newHero)) 
+        // .then(res => console.log(res, 'Отправка успешна')) 
+        // .then(dispatch(heroPost(newHero)))
+        // .catch(err => console.log(err));
 
         setFormData({ name: '', description: '', element: '' });
     };
